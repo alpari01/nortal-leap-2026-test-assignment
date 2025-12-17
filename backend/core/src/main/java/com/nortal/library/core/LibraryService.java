@@ -75,6 +75,12 @@ public class LibraryService {
       return Result.failure("ALREADY_RESERVED");
     }
 
+    if (entity.getLoanedTo() == null) {
+      // if book is not loaned, then borrow right away instead of reserving.
+      this.borrowBook(entity.getId(), memberId);
+      return Result.success();
+    }
+
     entity.getReservationQueue().add(memberId);
     bookRepository.save(entity);
     return Result.success();
