@@ -2,7 +2,8 @@ export const translations = {
   en: {
     title: 'Nortal LEAP 2026 Assignment',
     subtitle: 'Fix the library service behaviors and keep the app running.',
-    apiOffline: 'Backend API not reachable. Start it with "cd backend && ./gradlew :api:bootRun" then reload.',
+    apiOffline:
+      'Backend API not reachable. Start it with "cd backend && ./gradlew :api:bootRun" then reload.',
     apiTitle: 'Try the library API',
     booksTitle: 'Books',
     membersTitle: 'Members',
@@ -72,4 +73,3 @@ export type LocaleKey = keyof typeof translations;
 export function t(key: string, locale: LocaleKey = 'en'): string {
   return translations[locale][key as keyof (typeof translations)['en']] ?? key;
 }
-
