@@ -39,15 +39,15 @@ export class LibraryApiService {
     return this.post('/reserve', { bookId, memberId });
   }
 
-  async cancelReservation(bookId: string, memberId: string): Promise<ActionResult> {
+  async cancelReservation(
+    bookId: string,
+    memberId: string
+  ): Promise<ActionResult> {
     return this.post('/cancel-reservation', { bookId, memberId });
   }
 
-  async returnBook(bookId: string, memberId?: string): Promise<ActionResult> {
-    const payload: { bookId: string; memberId?: string } = { bookId };
-    if (memberId) {
-      payload.memberId = memberId;
-    }
+  async returnBook(bookId: string, memberId: string): Promise<ActionResult> {
+    const payload: { bookId: string; memberId: string } = { bookId, memberId };
     return this.post('/return', payload);
   }
 
@@ -75,7 +75,10 @@ export class LibraryApiService {
     return this.delete('/members', { id });
   }
 
-  private async post(path: string, payload: Record<string, string>): Promise<ActionResult> {
+  private async post(
+    path: string,
+    payload: Record<string, string>
+  ): Promise<ActionResult> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -84,7 +87,10 @@ export class LibraryApiService {
     return res.json();
   }
 
-  private async put(path: string, payload: Record<string, string>): Promise<ActionResult> {
+  private async put(
+    path: string,
+    payload: Record<string, string>
+  ): Promise<ActionResult> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -93,7 +99,10 @@ export class LibraryApiService {
     return res.json();
   }
 
-  private async delete(path: string, payload: Record<string, string>): Promise<ActionResult> {
+  private async delete(
+    path: string,
+    payload: Record<string, string>
+  ): Promise<ActionResult> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
@@ -102,4 +111,3 @@ export class LibraryApiService {
     return res.json();
   }
 }
-

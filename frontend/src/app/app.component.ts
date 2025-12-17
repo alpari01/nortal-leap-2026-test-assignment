@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActionResult, Book, LibraryApiService, Member } from './library.service';
+import {
+  ActionResult,
+  Book,
+  LibraryApiService,
+  Member,
+} from './library.service';
 import { t as translate } from './i18n';
 
 @Component({
@@ -41,12 +46,19 @@ export class AppComponent {
   async refreshAll(): Promise<void> {
     this.loading = true;
     try {
-      const [books, members] = await Promise.all([this.api.books(), this.api.members()]);
+      const [books, members] = await Promise.all([
+        this.api.books(),
+        this.api.members(),
+      ]);
       this.apiAvailable = true;
       this.books = [...books].sort((a, b) => a.id.localeCompare(b.id));
       this.members = [...members].sort((a, b) => a.id.localeCompare(b.id));
-      const bookStillExists = this.selectedBookId && this.books.some(b => b.id === this.selectedBookId);
-      const memberStillExists = this.selectedMemberId && this.members.some(m => m.id === this.selectedMemberId);
+      const bookStillExists =
+        this.selectedBookId &&
+        this.books.some((b) => b.id === this.selectedBookId);
+      const memberStillExists =
+        this.selectedMemberId &&
+        this.members.some((m) => m.id === this.selectedMemberId);
       if (!bookStillExists) {
         this.selectedBookId = this.books.length ? this.books[0].id : null;
       }
@@ -67,14 +79,18 @@ export class AppComponent {
     if (!this.selectedBookId || !this.selectedMemberId) {
       return;
     }
-    await this.runAction(() => this.api.borrow(this.selectedBookId!, this.selectedMemberId!));
+    await this.runAction(() =>
+      this.api.borrow(this.selectedBookId!, this.selectedMemberId!)
+    );
   }
 
   async reserve(): Promise<void> {
     if (!this.selectedBookId || !this.selectedMemberId) {
       return;
     }
-    await this.runAction(() => this.api.reserve(this.selectedBookId!, this.selectedMemberId!));
+    await this.runAction(() =>
+      this.api.reserve(this.selectedBookId!, this.selectedMemberId!)
+    );
   }
 
   async cancelReservation(): Promise<void> {
@@ -87,10 +103,12 @@ export class AppComponent {
   }
 
   async returnBook(): Promise<void> {
-    if (!this.selectedBookId) {
+    if (!this.selectedBookId || !this.selectedMemberId) {
       return;
     }
-    await this.runAction(() => this.api.returnBook(this.selectedBookId!));
+    await this.runAction(() =>
+      this.api.returnBook(this.selectedBookId!, this.selectedMemberId!)
+    );
   }
 
   async createBook(): Promise<void> {
@@ -98,7 +116,9 @@ export class AppComponent {
       this.lastMessage = this.t('INVALID_REQUEST');
       return;
     }
-    await this.runAction(() => this.api.createBook(this.bookIdInput, this.bookTitleInput));
+    await this.runAction(() =>
+      this.api.createBook(this.bookIdInput, this.bookTitleInput)
+    );
     this.clearBookModal();
   }
 
@@ -107,7 +127,9 @@ export class AppComponent {
       this.lastMessage = this.t('INVALID_REQUEST');
       return;
     }
-    await this.runAction(() => this.api.updateBook(this.bookIdInput, this.bookTitleInput));
+    await this.runAction(() =>
+      this.api.updateBook(this.bookIdInput, this.bookTitleInput)
+    );
     this.clearBookModal();
   }
 
@@ -124,7 +146,9 @@ export class AppComponent {
       this.lastMessage = this.t('INVALID_REQUEST');
       return;
     }
-    await this.runAction(() => this.api.createMember(this.memberIdInput, this.memberNameInput));
+    await this.runAction(() =>
+      this.api.createMember(this.memberIdInput, this.memberNameInput)
+    );
     this.clearMemberModal();
   }
 
@@ -133,7 +157,9 @@ export class AppComponent {
       this.lastMessage = this.t('INVALID_REQUEST');
       return;
     }
-    await this.runAction(() => this.api.updateMember(this.memberIdInput, this.memberNameInput));
+    await this.runAction(() =>
+      this.api.updateMember(this.memberIdInput, this.memberNameInput)
+    );
     this.clearMemberModal();
   }
 
@@ -161,7 +187,9 @@ export class AppComponent {
   private describeResult(result: ActionResult): string {
     if (result.ok) {
       if (typeof result.nextMemberId !== 'undefined') {
-        return result.nextMemberId ? `${this.t('ok')} -> ${result.nextMemberId}` : this.t('ok');
+        return result.nextMemberId
+          ? `${this.t('ok')} -> ${result.nextMemberId}`
+          : this.t('ok');
       }
       return this.t('ok');
     }
@@ -170,19 +198,26 @@ export class AppComponent {
   }
 
   get activeBook(): Book | undefined {
-    return this.selectedBookId ? this.books.find(b => b.id === this.selectedBookId) : undefined;
+    return this.selectedBookId
+      ? this.books.find((b) => b.id === this.selectedBookId)
+      : undefined;
   }
 
   get activeMember(): Member | undefined {
-    return this.selectedMemberId ? this.members.find(m => m.id === this.selectedMemberId) : undefined;
+    return this.selectedMemberId
+      ? this.members.find((m) => m.id === this.selectedMemberId)
+      : undefined;
   }
 
   get booksOnLoanCount(): number {
-    return this.books.filter(b => !!b.loanedTo).length;
+    return this.books.filter((b) => !!b.loanedTo).length;
   }
 
   get queuedCount(): number {
-    return this.books.reduce((acc, book) => acc + book.reservationQueue.length, 0);
+    return this.books.reduce(
+      (acc, book) => acc + book.reservationQueue.length,
+      0
+    );
   }
 
   bookStatusLabel(book: Book): string {
@@ -278,4 +313,3 @@ export class AppComponent {
     this.memberNameInput = '';
   }
 }
-

@@ -11,7 +11,9 @@
       </div>
       <div class="pill">
         <span class="pill__label">{{ t('borrowStatus') }}</span>
-        <span class="pill__value">{{ booksOnLoanCount }} / {{ books.length }}</span>
+        <span class="pill__value"
+          >{{ booksOnLoanCount }} / {{ books.length }}</span
+        >
       </div>
       <div class="pill">
         <span class="pill__label">{{ t('queue') }}</span>
@@ -34,28 +36,73 @@
     <div class="controls">
       <label>
         <span>{{ t('selectBook') }}</span>
-        <select [(ngModel)]="selectedBookId" (ngModelChange)="onBookSelectionChange($event)" [disabled]="!apiAvailable || !books.length">
-          <option *ngFor="let b of books" [value]="b.id">{{ b.id }} — {{ b.title }}</option>
+        <select
+          [(ngModel)]="selectedBookId"
+          (ngModelChange)="onBookSelectionChange($event)"
+          [disabled]="!apiAvailable || !books.length"
+        >
+          <option *ngFor="let b of books" [value]="b.id">
+            {{ b.id }} — {{ b.title }}
+          </option>
         </select>
       </label>
       <label>
         <span>{{ t('selectMember') }}</span>
-        <select [(ngModel)]="selectedMemberId" (ngModelChange)="onMemberSelectionChange($event)" [disabled]="!apiAvailable || !members.length">
-          <option *ngFor="let m of members" [value]="m.id">{{ m.id }} — {{ m.name }}</option>
+        <select
+          [(ngModel)]="selectedMemberId"
+          (ngModelChange)="onMemberSelectionChange($event)"
+          [disabled]="!apiAvailable || !members.length"
+        >
+          <option *ngFor="let m of members" [value]="m.id">
+            {{ m.id }} — {{ m.name }}
+          </option>
         </select>
       </label>
       <div class="actions">
-        <button (click)="borrow()" [disabled]="loading || !selectedBookId || !selectedMemberId || !apiAvailable">{{ t('borrow') }}</button>
-        <button class="secondary" (click)="reserve()" [disabled]="loading || !selectedBookId || !selectedMemberId || !apiAvailable">{{ t('reserve') }}</button>
-        <button class="ghost" (click)="cancelReservation()" [disabled]="loading || !selectedBookId || !selectedMemberId || !apiAvailable">{{ t('cancelReservation') }}</button>
-        <button class="ghost" (click)="returnBook()" [disabled]="loading || !selectedBookId || !apiAvailable">{{ t('return') }}</button>
+        <button
+          (click)="borrow()"
+          [disabled]="
+            loading || !selectedBookId || !selectedMemberId || !apiAvailable
+          "
+        >
+          {{ t('borrow') }}
+        </button>
+        <button
+          class="secondary"
+          (click)="reserve()"
+          [disabled]="
+            loading || !selectedBookId || !selectedMemberId || !apiAvailable
+          "
+        >
+          {{ t('reserve') }}
+        </button>
+        <button
+          class="ghost"
+          (click)="cancelReservation()"
+          [disabled]="
+            loading || !selectedBookId || !selectedMemberId || !apiAvailable
+          "
+        >
+          {{ t('cancelReservation') }}
+        </button>
+        <button
+          class="ghost"
+          (click)="returnBook()"
+          [disabled]="
+            loading || !selectedBookId || !selectedMemberId || !apiAvailable
+          "
+        >
+          {{ t('return') }}
+        </button>
       </div>
     </div>
 
     <div class="status-grid">
       <div class="status-card">
         <p class="muted">{{ t('status') }}</p>
-        <div class="status-text">{{ loading ? t('loading') : (lastMessage || t('statusIdle')) }}</div>
+        <div class="status-text">
+          {{ loading ? t('loading') : lastMessage || t('statusIdle') }}
+        </div>
       </div>
       <div class="status-card">
         <p class="muted">{{ t('bookStatus') }}</p>
@@ -83,29 +130,62 @@
       <div class="card__header">
         <div class="header-left">
           <h3>{{ t('booksTitle') }}</h3>
-          <button class="secondary small-btn" (click)="openBookModal('create')" [disabled]="loading || !apiAvailable">{{ t('add') }}</button>
+          <button
+            class="secondary small-btn"
+            (click)="openBookModal('create')"
+            [disabled]="loading || !apiAvailable"
+          >
+            {{ t('add') }}
+          </button>
         </div>
         <span class="badge">{{ books.length }}</span>
       </div>
       <ng-container *ngIf="books.length; else noBooks">
         <ul class="list">
-          <li *ngFor="let b of books" [class.active]="b.id === selectedBookId" (click)="selectBook(b.id)">
+          <li
+            *ngFor="let b of books"
+            [class.active]="b.id === selectedBookId"
+            (click)="selectBook(b.id)"
+          >
             <div class="line">
               <div>
                 <div class="id">{{ b.id }}</div>
                 <div class="title">{{ b.title }}</div>
               </div>
               <div class="chip-group">
-                <span class="chip" [class.warn]="!!b.loanedTo">{{ bookStatusLabel(b) }}</span>
-                <span class="chip outline" *ngIf="b.loanedTo">{{ t('holder') }}: {{ b.loanedTo }}</span>
-                <button class="icon-btn" (click)="openBookModal('edit', b); $event.stopPropagation()" [disabled]="loading || !apiAvailable" title="{{ t('edit') }}">✎</button>
-                <button class="icon-btn danger" (click)="deleteBook(b.id); $event.stopPropagation()" [disabled]="loading || !apiAvailable" title="{{ t('delete') }}">✕</button>
+                <span class="chip" [class.warn]="!!b.loanedTo">{{
+                  bookStatusLabel(b)
+                }}</span>
+                <span class="chip outline" *ngIf="b.loanedTo"
+                  >{{ t('holder') }}: {{ b.loanedTo }}</span
+                >
+                <button
+                  class="icon-btn"
+                  (click)="openBookModal('edit', b); $event.stopPropagation()"
+                  [disabled]="loading || !apiAvailable"
+                  title="{{ t('edit') }}"
+                >
+                  ✎
+                </button>
+                <button
+                  class="icon-btn danger"
+                  (click)="deleteBook(b.id); $event.stopPropagation()"
+                  [disabled]="loading || !apiAvailable"
+                  title="{{ t('delete') }}"
+                >
+                  ✕
+                </button>
               </div>
             </div>
             <div class="muted row">
               <span>{{ t('queue') }}:</span>
-              <div class="queue" *ngIf="b.reservationQueue.length; else noQueue">
-                <span class="queue-chip" *ngFor="let m of b.reservationQueue">{{ m }}</span>
+              <div
+                class="queue"
+                *ngIf="b.reservationQueue.length; else noQueue"
+              >
+                <span class="queue-chip" *ngFor="let m of b.reservationQueue">{{
+                  m
+                }}</span>
               </div>
               <ng-template #noQueue>{{ t('queueEmpty') }}</ng-template>
             </div>
@@ -121,19 +201,43 @@
       <div class="card__header">
         <div class="header-left">
           <h3>{{ t('membersTitle') }}</h3>
-          <button class="secondary small-btn" (click)="openMemberModal('create')" [disabled]="loading || !apiAvailable">{{ t('add') }}</button>
+          <button
+            class="secondary small-btn"
+            (click)="openMemberModal('create')"
+            [disabled]="loading || !apiAvailable"
+          >
+            {{ t('add') }}
+          </button>
         </div>
         <span class="badge">{{ members.length }}</span>
       </div>
       <ng-container *ngIf="members.length; else noMembers">
         <ul class="list members">
-          <li *ngFor="let m of members" [class.active]="m.id === selectedMemberId" (click)="selectMember(m.id)">
+          <li
+            *ngFor="let m of members"
+            [class.active]="m.id === selectedMemberId"
+            (click)="selectMember(m.id)"
+          >
             <div class="line">
               <div class="id">{{ m.id }}</div>
               <div class="title">{{ m.name }}</div>
               <div class="chip-group">
-                <button class="icon-btn" (click)="openMemberModal('edit', m); $event.stopPropagation()" [disabled]="loading || !apiAvailable" title="{{ t('edit') }}">✎</button>
-                <button class="icon-btn danger" (click)="deleteMember(m.id); $event.stopPropagation()" [disabled]="loading || !apiAvailable" title="{{ t('delete') }}">✕</button>
+                <button
+                  class="icon-btn"
+                  (click)="openMemberModal('edit', m); $event.stopPropagation()"
+                  [disabled]="loading || !apiAvailable"
+                  title="{{ t('edit') }}"
+                >
+                  ✎
+                </button>
+                <button
+                  class="icon-btn danger"
+                  (click)="deleteMember(m.id); $event.stopPropagation()"
+                  [disabled]="loading || !apiAvailable"
+                  title="{{ t('delete') }}"
+                >
+                  ✕
+                </button>
               </div>
             </div>
           </li>
@@ -145,50 +249,105 @@
     </div>
   </section>
 
-<div class="modal-backdrop" *ngIf="bookModalOpen">
-  <div class="modal card">
-    <div class="card__header">
-      <h3>{{ bookModalMode === 'edit' ? t('edit') : t('add') }} {{ t('booksTitle') }}</h3>
-      <button class="icon-btn" (click)="closeBookModal()" title="{{ t('cancelAction') }}">✕</button>
-    </div>
-    <div class="form-grid">
-      <label class="field">
-        <span>{{ t('bookId') }}</span>
-        <input [placeholder]="t('bookId')" [(ngModel)]="bookIdInput" [disabled]="bookModalMode === 'edit' || loading" />
-      </label>
-      <label class="field">
-        <span>{{ t('bookTitle') }}</span>
-        <input [placeholder]="t('bookTitle')" [(ngModel)]="bookTitleInput" [disabled]="loading" />
-      </label>
-    </div>
-    <div class="actions split">
-      <button (click)="submitBookModal()" [disabled]="loading || !bookTitleInput || (!bookIdInput && bookModalMode === 'create')">{{ t('save') }}</button>
-      <button class="secondary" (click)="closeBookModal()">{{ t('cancelAction') }}</button>
+  <div class="modal-backdrop" *ngIf="bookModalOpen">
+    <div class="modal card">
+      <div class="card__header">
+        <h3>
+          {{ bookModalMode === 'edit' ? t('edit') : t('add') }}
+          {{ t('booksTitle') }}
+        </h3>
+        <button
+          class="icon-btn"
+          (click)="closeBookModal()"
+          title="{{ t('cancelAction') }}"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="form-grid">
+        <label class="field">
+          <span>{{ t('bookId') }}</span>
+          <input
+            [placeholder]="t('bookId')"
+            [(ngModel)]="bookIdInput"
+            [disabled]="bookModalMode === 'edit' || loading"
+          />
+        </label>
+        <label class="field">
+          <span>{{ t('bookTitle') }}</span>
+          <input
+            [placeholder]="t('bookTitle')"
+            [(ngModel)]="bookTitleInput"
+            [disabled]="loading"
+          />
+        </label>
+      </div>
+      <div class="actions split">
+        <button
+          (click)="submitBookModal()"
+          [disabled]="
+            loading ||
+            !bookTitleInput ||
+            (!bookIdInput && bookModalMode === 'create')
+          "
+        >
+          {{ t('save') }}
+        </button>
+        <button class="secondary" (click)="closeBookModal()">
+          {{ t('cancelAction') }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal-backdrop" *ngIf="memberModalOpen">
-  <div class="modal card">
-    <div class="card__header">
-      <h3>{{ memberModalMode === 'edit' ? t('edit') : t('add') }} {{ t('membersTitle') }}</h3>
-      <button class="icon-btn" (click)="closeMemberModal()" title="{{ t('cancelAction') }}">✕</button>
-    </div>
-    <div class="form-grid">
-      <label class="field">
-        <span>{{ t('memberId') }}</span>
-        <input [placeholder]="t('memberId')" [(ngModel)]="memberIdInput" [disabled]="memberModalMode === 'edit' || loading" />
-      </label>
-      <label class="field">
-        <span>{{ t('memberName') }}</span>
-        <input [placeholder]="t('memberName')" [(ngModel)]="memberNameInput" [disabled]="loading" />
-      </label>
-    </div>
-    <div class="actions split">
-      <button (click)="submitMemberModal()" [disabled]="loading || !memberNameInput || (!memberIdInput && memberModalMode === 'create')">{{ t('save') }}</button>
-      <button class="secondary" (click)="closeMemberModal()">{{ t('cancelAction') }}</button>
+  <div class="modal-backdrop" *ngIf="memberModalOpen">
+    <div class="modal card">
+      <div class="card__header">
+        <h3>
+          {{ memberModalMode === 'edit' ? t('edit') : t('add') }}
+          {{ t('membersTitle') }}
+        </h3>
+        <button
+          class="icon-btn"
+          (click)="closeMemberModal()"
+          title="{{ t('cancelAction') }}"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="form-grid">
+        <label class="field">
+          <span>{{ t('memberId') }}</span>
+          <input
+            [placeholder]="t('memberId')"
+            [(ngModel)]="memberIdInput"
+            [disabled]="memberModalMode === 'edit' || loading"
+          />
+        </label>
+        <label class="field">
+          <span>{{ t('memberName') }}</span>
+          <input
+            [placeholder]="t('memberName')"
+            [(ngModel)]="memberNameInput"
+            [disabled]="loading"
+          />
+        </label>
+      </div>
+      <div class="actions split">
+        <button
+          (click)="submitMemberModal()"
+          [disabled]="
+            loading ||
+            !memberNameInput ||
+            (!memberIdInput && memberModalMode === 'create')
+          "
+        >
+          {{ t('save') }}
+        </button>
+        <button class="secondary" (click)="closeMemberModal()">
+          {{ t('cancelAction') }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
 </main>
-
