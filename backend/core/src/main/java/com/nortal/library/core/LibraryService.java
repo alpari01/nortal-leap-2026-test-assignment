@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 public class LibraryService {
   private static final int MAX_LOANS = 5;
@@ -73,6 +74,11 @@ public class LibraryService {
 
     if (entity.getReservationQueue().contains(memberId)) {
       return Result.failure("ALREADY_RESERVED");
+    }
+
+    if (Objects.equals(entity.getLoanedTo(), memberId)) {
+      // same member cannot reserve a book that he has already borrowed.
+      return Result.failure("ALREADY_LOANED");
     }
 
     if (entity.getLoanedTo() == null) {
