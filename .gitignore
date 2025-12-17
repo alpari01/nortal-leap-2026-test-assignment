@@ -1,6 +1,7 @@
 # Repo-local tooling
 .angular/
 .cursor/
+
 # Node / frontend
 frontend/node_modules
 frontend/dist
@@ -37,3 +38,6 @@ backend/api/spy.log
 # Internal-only
 internal/
 backend/hidden-tests/
+
+# Any build folders
+**/build/
