@@ -56,7 +56,7 @@ export const translations = {
     BOOK_RESERVED: 'Book is reserved for someone else',
     BORROW_LIMIT: 'Borrow limit reached',
     ALREADY_LOANED: 'You already have this book',
-    ALREADY_RESERVED: 'Already reserved',
+    ALREADY_RESERVED: 'You already reserved this book',
     MEMBER_HAS_LOANS: 'Member still has active loans',
     BOOK_LOANED: 'Book is currently loaned',
     QUEUE_EXISTS: 'Reservation queue exists; wait your turn',
