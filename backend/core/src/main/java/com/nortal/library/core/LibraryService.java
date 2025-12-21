@@ -84,6 +84,9 @@ public class LibraryService {
     if (!memberRepository.existsById(memberId)) {
       return Result.failure("MEMBER_NOT_FOUND");
     }
+    if (!canMemberBorrow(memberId)) {
+      return Result.failure("BORROW_LIMIT");
+    }
 
     Book entity = book.get();
 
